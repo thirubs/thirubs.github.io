@@ -1,20 +1,568 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1894.1">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Thiru</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social media icons (Updated to a more recent version) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+            color: #334155; /* Dark slate gray text */
+            padding-top: 4rem; /* Space for fixed navigation bar */
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .section-title {
+            border-bottom: 2px solid #cbd5e1; /* Light gray border */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #1e293b; /* Darker slate gray for titles */
+        }
+        .link-style {
+            color: #2563eb; /* Blue for links */
+            text-decoration: none;
+        }
+        .link-style:hover {
+            text-decoration: underline;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 1.25rem;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 1.25rem;
+        }
+        /* Custom styles for floating social media */
+        .social-float {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ffffff;
+            border-top-left-radius: 0.75rem;
+            border-bottom-left-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 0.75rem 0.5rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem; /* Space between icons */
+        }
+        .social-float a {
+            display: block;
+            padding: 0.5rem;
+            color: #475569; /* Slate gray for icons */
+            transition: color 0.2s ease-in-out;
+        }
+        .social-float a:hover {
+            color: #2563eb; /* Blue on hover */
+        }
+        .social-float i {
+            font-size: 1.5rem; /* Icon size */
+        }
+
+        /* Styles for the BibBase iframe */
+        .bibbase-iframe-container {
+            position: relative;
+            width: 100%;
+            height: 800px; /* Example height, adjust as necessary */
+            overflow: hidden; /* Hide scrollbars if content overflows */
+            border-radius: 0.5rem; /* Match card styling */
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Subtle inner shadow */
+        }
+        .bibbase-iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* Remove default iframe border */
+        }
+
+        /* Styles for Research Interests Hierarchy */
+        .hierarchy-list {
+            list-style: none; /* Remove default bullet points */
+            padding-left: 0;
+        }
+        .hierarchy-list li {
+            position: relative;
+            padding-left: 1.5rem; /* Space for lines */
+            margin-bottom: 0.5rem;
+        }
+        .hierarchy-list li:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem; /* Adjust to vertically center the line */
+            width: 1rem;
+            height: 0;
+            border-top: 1px solid #94a3b8; /* Slate gray line */
+        }
+        .hierarchy-list li:last-child:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            bottom: 0;
+            width: 0;
+            border-left: 1px solid #94a3b8;
+        }
+        .hierarchy-list ul {
+            list-style: none;
+            padding-left: 1.5rem; /* Indent nested lists */
+            margin-top: 0.5rem;
+        }
+        .hierarchy-list ul li:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            width: 1rem;
+            height: 0;
+            border-top: 1px solid #94a3b8;
+        }
+        .hierarchy-list ul li:last-child:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            bottom: 0;
+            width: 0;
+            border-left: 1px solid #94a3b8;
+        }
+        .category-item {
+            font-weight: 600; /* Semi-bold for categories */
+            color: #1e293b; /* Darker text for categories */
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem; /* text-lg */
+        }
+        .sub-category-item {
+            font-weight: 500; /* Medium font weight for sub-categories */
+            color: #334155;
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-size: 1rem; /* text-base */
+        }
+        .topic-item {
+            font-weight: 400; /* Normal font weight for topics */
+            color: #475569; /* Slightly lighter text for topics */
+            font-size: 0.95rem; /* Slightly smaller for topics */
+        }
+
+        /* Connecting vertical lines for hierarchy */
+        .hierarchy-list li:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            bottom: -0.5rem; /* Extend line to connect to next sibling */
+            width: 0;
+            border-left: 1px solid #94a3b8;
+        }
+        .hierarchy-list > li:last-child:after {
+            /* For the last child of the root, no vertical line extending downwards */
+            border-left: none;
+        }
+        .hierarchy-list ul > li:last-child:after {
+            /* For the last child of any nested list, no vertical line extending downwards */
+            border-left: none;
+        }
+        .hierarchy-list ul li:before {
+            /* Horizontal line for nested items */
+            left: 0;
+            width: 1rem;
+            border-top: 1px solid #94a3b8;
+        }
+        .hierarchy-list ul li:not(:last-child):after {
+            /* Vertical line for nested items */
+            left: 0;
+            top: 0.75rem;
+            bottom: -0.5rem;
+            border-left: 1px solid #94a3b8;
+        }
+
+        /* Floating News Box Styles */
+        .news-float {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1rem;
+            max-width: 300px; /* Limit width */
+            z-index: 999; /* Below social float */
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .news-float .news-item {
+            border-left: 4px solid #3b82f6; /* Blue border */
+            padding-left: 0.75rem;
+        }
+        .news-float .news-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .news-float .news-content {
+            font-size: 0.9rem;
+            color: #475569;
+        }
+        .news-float .news-footer {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive adjustments for floating elements */
+        @media (max-width: 768px) {
+            .social-float {
+                right: 0.5rem;
+                padding: 0.5rem 0.25rem;
+                gap: 0.5rem;
+            }
+            .social-float i {
+                font-size: 1.2rem;
+            }
+            .news-float {
+                bottom: 0.5rem;
+                left: 0.5rem;
+                max-width: calc(100% - 1rem); /* Adjust width for small screens */
+                padding: 0.75rem;
+            }
+        }
+    </style>
 </head>
-<body>
-<p class="p1">&lt;html&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1">&lt;h1&gt; Cite under construction &lt;/h1&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<body class="antialiased">
+
+    <!-- Fixed Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full bg-blue-800 text-white p-4 shadow-md z-50">
+        <div class="container mx-auto flex justify-center space-x-6 md:space-x-10">
+            <a href="#about" class="text-lg font-medium hover:text-blue-200 transition-colors">About</a>
+            <a href="#education" class="text-lg font-medium hover:text-blue-200 transition-colors">Education</a>
+            <a href="#experience" class="text-lg font-medium hover:text-blue-200 transition-colors">Experience</a>
+            <a href="#awards" class="text-lg font-medium hover:text-blue-200 transition-colors">Awards</a>
+            <a href="#professional-activities" class="text-lg font-medium hover:text-blue-200 transition-colors">Activities</a>
+            <!-- Removed News link from navigation as it's now floating -->
+            <a href="#research-interests" class="text-lg font-medium hover:text-blue-200 transition-colors">Research</a>
+            <a href="#publications" class="text-lg font-medium hover:text-blue-200 transition-colors">Publications</a>
+            <a href="#consultancy" class="text-lg font-medium hover:text-blue-200 transition-colors">Consultancy</a>
+            <a href="#contact" class="text-lg font-medium hover:text-blue-200 transition-colors">Contact</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-blue-800 mb-4">Dr. Thirunavukarasu Balasubramaniam (Thiru)</h1>
+            <div class="w-48 h-48 mx-auto bg-gray-200 rounded-full flex items-center justify-center overflow-hidden shadow-lg mb-6">
+                <!-- Placeholder for photo
+                <span class="text-gray-500 text-lg">Your Photo Here</span> -->
+                <!-- To add your photo, replace the span above with an img tag like this: -->
+                <img src="Thiru Headshot.jpg" alt="Dr. Thiru Balasubramaniam" class="w-full h-full object-cover">
+            </div>
+        </header>
+
+        <!-- About Me Section (Condensed) -->
+        <section id="about" class="card">
+            <h2 class="text-3xl font-semibold section-title">About Me</h2>
+            <p class="mb-4 leading-relaxed">
+                I am Dr. Thiru, a <b>data scientist</b> researcher and teacher with <b>10 years</b> of international experience. My academic journey has taken me through esteemed institutions including the Queensland University of Technology (QUT), Kyungpook National University (KNU), and the Singapore University of Technology and Design – Massachusetts Institute of Technology (SUTD-MIT) International Design Centre. I am currently a Research Fellow at the School of Computer Science, QUT, Australia.
+            </p>
+            <p class="leading-relaxed">
+                My work focuses on the intersection of theoretical machine learning and its transdisciplinary applications, with a passion for real-world problem-solving using data-driven insights. My research has been published in top-tier journals and conferences, including IEEE TKDE, ACM TKDD, SNAM, WISE, WWW, AusDM, and PRICAI. I am committed to advancing the field of data science and applying innovative solutions to complex challenges.
+            </p>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="card">
+            <h2 class="text-3xl font-semibold section-title">Education</h2>
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Graduate Certificate in Cyber Security and Networking</h3>
+                <p class="text-gray-600">Melbourne Institute of Technology, Australia</p>
+                <p class="text-gray-600">2021</p>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Doctor of Philosophy (Ph.D.) in Data Science</h3>
+                <p class="text-gray-600">Queensland University of Technology, Australia</p>
+                <p class="text-gray-600">2016 – 2020</p>
+                <p class="text-gray-600">Thesis: <em>Matrix/Tensor Factorization with Selective Coordinate Descent - Algorithms and Output Usage</em></p>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800">B.E. Computer Science and Engineering, First Class</h3>
+                <p class="text-gray-600">SNS College of Technology, Anna University, Chennai, India</p>
+                <p class="text-gray-600">2011 – 2015</p>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="card">
+            <h2 class="text-3xl font-semibold section-title">Experience</h2>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Research Fellow in Data Science</h3>
+                <p class="text-gray-600">QUT Centre for Data Science, School of Computer Science, Queensland University of Technology, Australia</p>
+                <p class="text-gray-600">August 2020 – Present</p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Sessional Academic – Tutoring</h3>
+                <p class="text-gray-600">Science and Engineering Faculty, Queensland University of Technology, Australia</p>
+                <p class="text-gray-600">2016 – Present</p>
+                <ul class="list-disc pl-5 text-gray-600">
+                    <li>IFN580 - Machine Learning (Feedback score - 100% student satisfaction) </li>
+                    <li>IFN645 - Data Mining Technology and Applications (Feedback score – 4.7/5)</li>
+                    <li>CAB330 - Data and Web Analytics (Feedback score – 4.6/5)</li>
+                    <li>IFN509 - Data Manipulation and Mining</li>
+                    <li>CAB230 - Web Computing (2017)</li>
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Research Associate</h3>
+                <p class="text-gray-600">Science and Engineering Faculty, Queensland University of Technology, Australia</p>
+                <p class="text-gray-600">April 2020 – August 2020</p>
+                <p class="text-gray-600">Project: DNRME – Data extraction from reports (Focused on automating data extraction from historical mining reports using machine learning.)</p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Research Assistant</h3>
+                <p class="text-gray-600">Creative Industries Faculty, Queensland University of Technology, Australia</p>
+                <p class="text-gray-600">2019 – 2020</p>
+                <p class="text-gray-600">Project: Email Data Extraction and Analysis (Developed a tool to analyze the evolution of "Design Thinking" concepts from email collections.)</p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Research Assistant</h3>
+                <p class="text-gray-600">Science and Engineering Faculty, Queensland University of Technology, Australia</p>
+                <p class="text-gray-600">2018 – 2019</p>
+                <p class="text-gray-600">Project: Rural Industries RDC- Data Discovery for Horizon Scan (Developed a patent information extraction tool and applied data mining to identify trends relevant to Australian rural industries.)</p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Research Assistant</h3>
+                <p class="text-gray-600">Science and Engineering Faculty, Queensland University of Technology, Australia</p>
+                <p class="text-gray-600">2017 – 2018</p>
+                <p class="text-gray-600">Project: CRDC - Data Discovery for Sustainability Reporting (Developed a data mining methodology for extracting and integrating Big Data from various sources for sustainability reporting.)</p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Research Assistant</h3>
+                <p class="text-gray-600">Engineering Product Development, Singapore University of Technology and Design (SUTD) – Massachusetts Institute of Technology (MIT), Singapore</p>
+                <p class="text-gray-600">2015 – 2016</p>
+                <p class="text-gray-600">Projects: Smart grid data analytics, solar energy management, Understanding the environment for elderly citizens.</p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Research Intern</h3>
+                <p class="text-gray-600">Connected Computing and Media Processing (CCMP) Lab, Kyungpook National University, Daegu, South Korea</p>
+                <p class="text-gray-600">2014 – 2015</p>
+                <p class="text-gray-600">Project: Ubiquitous healthcare architecture in the big data environment.</p>
+            </div>
+        </section>
+
+        <!-- Awards and Scholarships Section -->
+        <section id="awards" class="card">
+            <h2 class="text-3xl font-semibold section-title">Awards and Scholarships</h2>
+            <ul class="list-disc pl-5 space-y-1">
+                <li><strong>2023:</strong> QUT Faculty of Science - Computational Bioimaging Research Group ($50,000)</li>
+                <li><strong>2021:</strong> Identified as a distinguished talent by the Australian government and granted permanent residency</li>
+                <li><strong>2021:</strong> QUT Centre for Data Science – First Byte Funding (Round 2) ($40,000)</li>
+                <li><strong>2021:</strong> QUT Centre for Data Science – First Byte Funding (Round 1) ($30,000)</li>
+				<li><strong>2020:</strong> Nominated for Outstanding PhD Thesis Award
+                <li><strong>2020:</strong> QUT SEF HDR High Achiever Award (July 2020)</li>
+                <li><strong>2016:</strong> Queensland University of Technology Postgraduate Research Award</li>
+                <li><strong>2016:</strong> QUT Higher Degree Research Tuition Fee Sponsorship</li>
+                <li><strong>2015:</strong> Remarkable Student Achievement Award at the SNS College of Technology.</li>
+            </ul>
+        </section>
+
+        <!-- Professional Activities Section -->
+        <section id="professional-activities" class="card">
+            <h2 class="text-3xl font-semibold section-title">Professional Activities</h2>
+            <ul class="list-disc pl-5 space-y-1">
+                <li><strong>Journal Reviewer:</strong> ACM Transactions on Knowledge Discovery from Data, Elsevier Knowledge-Based Systems, Frontiers of Information Technology and Electronic Engineering Journal, MDPI Sustainability Journal, Vehicular Communications Journal.</li>
+                <li><strong>TPC Member of Conferences:</strong> IEEE ICSNS 2018, Mobiquitous 2019, IEEE RIVF 2020, IEEE ICOT 2020, AusDM 2020-2024.</li>
+                <li><strong>Research Track Chair:</strong> AusDM2024</li>
+                <li><strong>Guest Editor:</strong> Neural Computing and Applications (AusDM24 topical collection)</li>
+                <li><strong>Membership:</strong>IEEE Member</li>
+            </ul>
+        </section>
+
+        <!-- Research Interests Section (Now with Simplified Hierarchy Visualization) -->
+        <section id="research-interests" class="card">
+            <h2 class="text-3xl font-semibold section-title">My Research Interests Hierarchy</h2>
+            <ul class="hierarchy-list">
+                
+                    
+                        <li class="category-item">Advanced Machine Learning
+                            <ul class="hierarchy-list">
+                                <li class="topic-item">Data Science</li>
+                                <li class="topic-item">Data Mining</li>
+                                <li class="topic-item">Artificial Intelligence</li>
+                                <li class="topic-item">Machine Learning</li>
+                                <li class="topic-item">Transfer Learning</li>
+                                <li class="topic-item">Deep Learning</li>
+                                <li class="topic-item">Multi-view Learning</li>
+                                <li class="topic-item">Matrix/Tensor Factorization</li>
+                                <li class="topic-item">Timeseries forecasting</li>
+                                <li class="topic-item">Physics-informed neural network</li>
+                                <li class="topic-item">Generative AI</li>
+                                <li class="topic-item">Pattern Mining</li>
+                                <li class="topic-item">Clustering</li>
+                                <li class="topic-item">Topic Modelling</li>
+                            </ul>
+                        </li>
+                    
+                
+                <li class="category-item">Applications & Impact
+                    <ul class="hierarchy-list">
+                        <li class="sub-category-item">Personalized Systems
+                            <ul class="hierarchy-list">
+                                <li class="topic-item">Recommender Systems</li>
+                                <li class="topic-item">Personalization</li>
+                            </ul>
+                        </li>
+                        <li class="sub-category-item">Urban & Societal Impact
+                            <ul class="hierarchy-list">
+                                <li class="topic-item">Smart Cities</li>
+                            </ul>
+                        </li>
+                        <li class="sub-category-item">Industrial & Domain Applications
+                            <ul class="hierarchy-list">
+                                <li class="topic-item">Agriculture</li>
+                                <li class="topic-item">Manufacturing</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="publications" class="card">
+            <h2 class="text-3xl font-semibold section-title">Publications</h2>
+            <p class="mb-4 leading-relaxed">
+                Below is a dynamic list of my publications, powered by BibBase.
+                For a comprehensive overview of my research and citation metrics, please visit my <a href="https://scholar.google.com/citations?user=FIi0zMYAAAAJ&hl=en" class="link-style" target="_blank" rel="noopener noreferrer">Google Scholar profile</a>.
+            </p>
+            <!-- BibBase iframe placeholder -->
+            <div class="bibbase-iframe-container">
+                <iframe class="bibbase-iframe" src="https://bibbase.org/show?bib=http://www.bibsonomy.org/bib/author/Thirunavukarasu%20Balasubramaniam?items=1000" title="My Publications"></iframe>
+            </div>
+        </section>
+
+        <!-- Educational Consultancy Section -->
+        <section id="consultancy" class="card">
+            <h2 class="text-3xl font-semibold section-title">Educational Consultancy</h2>
+            <p class="mb-4 leading-relaxed">
+                In addition to my academic endeavors, I lead an educational consultancy venture, <a href="http://TADucation.com" class="link-style" target="_blank" rel="noopener noreferrer">TADucation</a>.
+                Through TADucation, I provide dedicated mentoring and guidance for students aspiring to pursue higher studies abroad, helping them navigate the complexities of international education.
+            </p>
+        </section>
+
+    <!-- Floating Social Media Links -->
+<!-- Contact & Links Section -->
+        <section id="contact" class="card">
+            <h2 class="text-3xl font-semibold section-title">Contact & Links</h2>
+            <div class="flex flex-wrap justify-center gap-6 mt-4">
+                <a href="mailto:thirunavukarasu.balas@qut.edu.au" class="text-gray-600 hover:text-blue-600 transition-colors flex flex-col items-center" title="Email">
+                    <i class="fas fa-envelope text-3xl"></i>
+                    <span class="text-sm mt-1">Email</span>
+                </a>
+                <a href="https://scholar.google.com/citations?user=FIi0zMYAAAAJ&hl=en" class="text-gray-600 hover:text-blue-600 transition-colors flex flex-col items-center" target="_blank" rel="noopener noreferrer" title="Google Scholar">
+                    <i class="fas fa-graduation-cap text-3xl"></i>
+                    <span class="text-sm mt-1">Scholar</span>
+                </a>
+                <a href="https://au.linkedin.com/in/dr-thiru-balasubramaniam-4bb78895" class="text-gray-600 hover:text-blue-600 transition-colors flex flex-col items-center" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                    <i class="fab fa-linkedin text-3xl"></i>
+                    <span class="text-sm mt-1">LinkedIn</span>
+                </a>
+                <a href="https://x.com/Thirubs" class="text-gray-600 hover:text-blue-600 transition-colors flex flex-col items-center" target="_blank" rel="noopener noreferrer" title="X (Twitter)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="h-8 w-8 fill-current">
+                        <g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.21 -6.873L4.935 21.75H1.627l7.804-8.914L2.25 2.25h3.308l5.215 6.874 5.215-6.874zm-2.828 17.5l-.783-.008L7.515 4.63h2.098l7.227 8.26L18.244 19.75z"></path></g>
+                    </svg>
+                    <span class="text-sm mt-1">X</span>
+                </a>
+                <a href="https://research.qut.edu.au/qutcds/staff/thirunavukarasu-balasubramaniam/" class="text-gray-600 hover:text-blue-600 transition-colors flex flex-col items-center" target="_blank" rel="noopener noreferrer" title="QUT Academic Profile">
+                    <i class="fas fa-university text-3xl"></i>
+                    <span class="text-sm mt-1">Work Profile</span>
+                </a>
+            </div>
+        </section>
+
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm mt-12">
+            <p>&copy; 2025 Dr. Thiru Balasubramaniam. All rights reserved.</p>
+            <p>Crafted for academic excellence and impactful research dissemination.</p>
+        </footer>
+    </div>
+
+<!-- Floating Social Media Links -->
+    <div class="social-float">
+        <a href="https://scholar.google.com/citations?user=FIi0zMYAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" title="Google Scholar">
+            <i class="fas fa-graduation-cap"></i> <!-- Google Scholar icon -->
+        </a>
+        <a href="https://au.linkedin.com/in/dr-thiru-balasubramaniam-4bb78895" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+            <i class="fab fa-linkedin"></i> <!-- LinkedIn icon -->
+        </a>
+        <a href="https://x.com/Thirubs" target="_blank" rel="noopener noreferrer" title="X (Twitter)">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="block h-6 w-6">
+                <g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.21 -6.873L4.935 21.75H1.627l7.804-8.914L2.25 2.25h3.308l5.215 6.874 5.215-6.874zm-2.828 17.5l-.783-.008L7.515 4.63h2.098l7.227 8.26L18.244 19.75z"></path></g>
+            </svg>
+        </a>
+        <a href="https://research.qut.edu.au/qutcds/staff/thirunavukarasu-balasubramaniam/" target="_blank" rel="noopener noreferrer" title="Work Profile">
+            <i class="fas fa-university"></i> <!-- University icon -->
+        </a>
+
+    </div>
+
+
+    <!-- Floating News Box -->
+    <div id="newsFloat" class="news-float">
+        <div class="flex justify-between items-center mb-2">
+            <h3 class="news-title">Latest Updates</h3>
+            <button id="closeNewsBtn" class="text-gray-500 hover:text-gray-800 focus:outline-none">
+                <i class="fas fa-times text-lg"></i> <!-- Close icon -->
+            </button>
+        </div>
+        <div class="news-item">
+            <p class="news-content">July 12, 2025: Excited to be serving as the Doctoral Consortium Track Chair for AusDM2025!</p>
+        </div>
+        <!-- Add more news items here as needed -->
+        <div class="news-footer">
+            <p>Check back here for more news!</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsFloat = document.getElementById('newsFloat');
+            const closeNewsBtn = document.getElementById('closeNewsBtn');
+
+            if (closeNewsBtn && newsFloat) {
+                closeNewsBtn.addEventListener('click', function() {
+                    newsFloat.style.display = 'none'; // Hide the news box
+                });
+            }
+        });
+    </script>
+	
 </body>
 </html>
